@@ -1,0 +1,3 @@
+# vim: set syntax=yaml:
+---
+  extends: "./node_modules/@retailmenot/core-ui-eslintrc/.eslintrc"
