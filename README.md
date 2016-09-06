@@ -1,6 +1,6 @@
-# @rmn/roux
+# @retailmenot/roux
 
-Node interface to a pantry of Roux ingredients.
+The SDK for the Roux component architecture, Roux ingredient spec, and a node interface to a pantry.
 
 ## Installation
 
