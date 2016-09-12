@@ -29,7 +29,7 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "@retailmenot/core-ui-eslintrc": "^3.0.0",
+    "@retailmenot/core-ui-eslintrc": "^4.0.0",
     "eslint": "^2.11.1",
     "mock-fs": "^3.6.0",
     "mockery": "^1.4.0",
