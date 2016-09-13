@@ -4,7 +4,7 @@
   "description": "Roux SDK and specification",
   "main": "index.js",
   "scripts": {
-    "eslint": "eslint .",
+    "lint": "eslint .",
     "test": "tap -Rspec test/*.js"
   },
   "repository": {

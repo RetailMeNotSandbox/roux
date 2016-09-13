@@ -755,7 +755,7 @@ tap.test('API', function (t) {
 				],
 				function (arg) {
 					t.throws(function () {
-						rouxIngredientSassImporter({
+						parseIngredientPath({
 							pantries: arg
 						});
 					}, 'must be a string');
