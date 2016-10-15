@@ -387,7 +387,7 @@ function resolve(pantry, ingredient, entryPoint, config) {
 	})
 	.then(function (pantryInstance) {
 		assert(
-			pantryInstance instanceof Pantry,
+			Pantry.isPantry(pantryInstance),
 			util.format(
 				'Pantry must be a pantry. Got: %s',
 				typeof pantryInstance
