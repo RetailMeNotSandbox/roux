@@ -30,19 +30,19 @@
   "license": "MIT",
   "devDependencies": {
     "@retailmenot/core-ui-editorconfig": "^1.0.2",
-    "@retailmenot/core-ui-eslintrc": "^4.0.0",
-    "eslint": "^2.11.1",
+    "@retailmenot/core-ui-eslintrc": "^5.0.0",
+    "eslint": "^3.8.1",
     "mock-fs": "^3.6.0",
-    "mockery": "^1.4.0",
+    "mockery": "^2.0.0",
     "sinon": "^1.17.2",
-    "tap": "^2.2.0"
+    "tap": "^8.0.0"
   },
   "dependencies": {
     "bluebird": "^3.0.5",
     "core-error-predicates": "^1.1.0",
     "debug": "^2.2.0",
-    "glob": "^6.0.1",
-    "lodash": "^3.10.1",
+    "glob": "^7.1.1",
+    "lodash": "^4.16.4",
     "path-parse": "^1.0.5",
     "validate-npm-package-name": "^2.2.2"
   }
