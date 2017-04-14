@@ -1,41 +1,43 @@
-# Conventions
-The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
-"SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be
-interpreted as described in [RFC 2119][].
+# Roux Ingredient Spec
 
-# Roux Ingredients
-A component in the Roux ecosystem is called an *ingredient*. A Roux ingredient
-is a filesystem subtree containing an `ingredient.md` file at its root.
-Ingredients must be distributed in a *pantry*: a filesystem subtree containing
-one or more Roux ingredients.
+A component in the Roux ecosystem is called an **ingredient**. An ingredient is
+a reusable, modular, and standalone component of any size.
 
-An ingredient may be small (e.g. a single button) or large (the entire coupon
-ingredient). An ingredient may include other ingredients by composition (the
-coupon uses the button ingredient, e.g.), but must not contain other
-ingredients: if an `ingredient.md` file appears in a subdirectory of an
-ingredient, it will be ignored. Roux ingredient tools must ignore
-`ingredient.md` files that appear in a subdirectory of an ingredient.
+An ingredient is a filesystem subtree containing an `ingredient.md` file at its
+root. Ingredients must be distributed in a **pantry**: a filesystem subtree
+containing one or more ingredients.
+
+An ingredient can be of any size. An ingredient may *include* other ingredients
+by composition (IngredientA references IngredientB, e.g.), but must not
+*contain* other ingredients: if an `ingredient.md` file appears in a
+subdirectory of an ingredient, it will be ignored. Roux ingredient tools must
+ignore `ingredient.md` files that appear in a subdirectory of an ingredient.
 
 ## `ingredient.md`
+
 An ingredient is defined by the presence of a file named `ingredient.md` in a
 directory. The file should document the usage of the ingredient. Roux ingredient
 tools may use the first paragraph of the file as a description of the
 ingredient.
 
-## Roux ingredient path
+## Ingredient Path
+
 Ingredients are named by an *ingredient path*. An ingredient path must begin
-with a pantry name followed by a slash: `my-pantry/`. The pantry name may
-include an [npm scope][]: `@scope/my-pantry/`. The remainder of the ingredient
-path must be the slash-delimited path from the pantry root to the ingredient:
-`@scope/my-pantry/path/to/my-ingredient`.
+with a pantry name followed by a slash: `my-pantry/`.
+
+The pantry name may include an [npm scope][]: `@scope/my-pantry/`.
+The remainder of the ingredient path must be the slash-delimited path from
+the pantry root to the ingredient: `@scope/my-pantry/path/to/my-ingredient`.
 
 ### Examples
+
 - `pantry/ingredient`
 - `pantry/path/to/ingredient`
 - `@scope/pantry/ingredient`
 - `@scope/pantry/path/to/ingredient`
 
 ### Private ingredient paths
+
 Ingredients should refer to non-entry point files using relative paths:
 `../path/to/file`.
 
@@ -99,4 +101,3 @@ referring to one or more of its entry points. Ingredients must not refer to
 any other files in an ingredient.
 
 [npm scope]: https://docs.npmjs.com/misc/scope
-[RFC 2119]: https://www.ietf.org/rfc/rfc2119.txt
