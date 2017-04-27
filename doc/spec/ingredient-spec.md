@@ -5,13 +5,18 @@ a reusable, modular, and standalone component of any size.
 
 An ingredient is a filesystem subtree containing an `ingredient.md` file at its
 root. Ingredients must be distributed in a **pantry**: a filesystem subtree
-containing one or more ingredients.
+containing one or more ingredients. [Read the Pantry specification for more information on pantries.](pantry-spec.md)
 
 An ingredient can be of any size. An ingredient may *include* other ingredients
-by composition (IngredientA references IngredientB, e.g.), but must not
-*contain* other ingredients: if an `ingredient.md` file appears in a
-subdirectory of an ingredient, it will be ignored. Roux ingredient tools must
-ignore `ingredient.md` files that appear in a subdirectory of an ingredient.
+by composition but must not *contain* other ingredients.
+
+For example: `@my-scope/my-pantry/my-ingredient-a` may import or reference `@my-scope/my-pantry/my-ingredient-b`, but it may not reference
+`@my-scope/my-pantry/my-ingredient-b/sub-file.scss`.
+
+If an `ingredient.md` file appears in a subdirectory of an ingredient, it will
+be ignored. Roux ingredient tools must ignore `ingredient.md` files that appear in a subdirectory of an ingredient.
+
+
 
 ## `ingredient.md`
 
@@ -22,12 +27,11 @@ ingredient.
 
 ## Ingredient Path
 
-Ingredients are named by an *ingredient path*. An ingredient path must begin
-with a pantry name followed by a slash: `my-pantry/`.
+Ingredients are named by an *ingredient path*.
 
-The pantry name may include an [npm scope][]: `@scope/my-pantry/`.
-The remainder of the ingredient path must be the slash-delimited path from
-the pantry root to the ingredient: `@scope/my-pantry/path/to/my-ingredient`.
+An ingredient path takes the following form: `[<scope>]/<pantry>/<ingredient>`
+
+The pantry name may include an [npm scope][]: `@scope/my-pantry/`
 
 ### Examples
 
@@ -39,15 +43,18 @@ the pantry root to the ingredient: `@scope/my-pantry/path/to/my-ingredient`.
 ### Private ingredient paths
 
 Ingredients should refer to non-entry point files using relative paths:
-`../path/to/file`.
+`./path/to/file`.
+
+For example, in `my-ingredient/index.scss`, to refer to a non-entry point
+SCSS file, you may `@import subfile.scss` or `@import subfolder/subfile.scss`.
 
 Some technologies (Handlebars, e.g.) have limitations that prevent using
-relative paths. In this case, ingredients must refer to non-entry point files by
-prepending a relative path from the ingredient root to the file in question with
-the ingredient's ingredient path:
-`@scope/my-pantry/path/to/my-ingredient/path/to/file`. The resulting path must
-be normalized: `@scope/my-pantry/my-ingredient/./foo` must be written as
-`@scope/my-pantry/my-ingredient/foo`, e.g.
+relative paths. In this case, ingredients must refer to non-entry point files
+by prepending a relative path from the ingredient root to the file in
+question with the ingredient's ingredient path: `@scope/my-pantry/path/to/my-ingredient/path/to/file`.
+
+The resulting path must be normalized: `@scope/my-pantry/my-ingredient/./foo`
+must be written as `@scope/my-pantry/my-ingredient/foo`, e.g.
 
 In any case, an ingredient path must not refer to a non-entry point file in
 another ingredient.

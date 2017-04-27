@@ -19,7 +19,8 @@ For example:
 │       │   └── model.js
 ```
 
-Pantries are typically named `pantry` but can be named anything you choose.
+A pantry folder is typically but not required to be named `pantry`.
+
 A consuming application will define the `pantryRoot` in its `package.json`:
 
 ```
@@ -28,13 +29,22 @@ A consuming application will define the `pantryRoot` in its `package.json`:
  }
 ```
 
+Or for a folder not named `pantry`:
+
+```
+ "roux": {
+   "pantryRoot": "somethingelse"
+ }
+```
 
 ## `pantry.js`
 
 A pantry is defined by the presence of a file named `pantry.js` in the root
-level pantry directory (above, `pantry`). A pantry cannot contain another pantry.
+level pantry folder.
 
-A pantry should know some things about itself.
+A project may contain multiple pantries, but a folder with a `pantry.js` file cannot exist as a child of a folder with a `pantry.js`.
+
+A pantry should know some things about itself:
 
 In `pantry.js`, a developer must define:
 
@@ -48,12 +58,12 @@ In `pantry.js`, a developer must define:
 ## Example `pantry.js`
 
 ```
-{
+module.exports = {
     "name": "my-pantry",
     "version": "1.0.3",
     "description": "A pantry with ingredients for my app.",
     initialize: {
-        path: 'path/to/my/pantry',
+        path: "path/to/my/pantry",
         predicates: {
             sass: /^index.scss$/,
             hbs: /^index.hbs$/,
