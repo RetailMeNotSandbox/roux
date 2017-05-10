@@ -1,21 +1,19 @@
 # Roux Ingredient Spec
 
-A component in the Roux ecosystem is called an **ingredient**. An ingredient is
-a reusable, modular, and standalone component of any size.
+A component in the Roux ecosystem is called an **ingredient**.
 
 An ingredient is a filesystem subtree containing an `ingredient.md` file at its
 root. Ingredients must be distributed in a **pantry**: a filesystem subtree
-containing one or more ingredients. [Read the Pantry specification for more information on pantries.](pantry-spec.md)
+containing one or more Roux ingredients. [Read the Pantry specification for more information on pantries.](pantry-spec.md)
 
 An ingredient can be of any size. An ingredient may *include* other ingredients
 by composition but must not *contain* other ingredients.
 
-For example: `@my-scope/my-pantry/my-ingredient-a` may import or reference `@my-scope/my-pantry/my-ingredient-b`, but it may not reference
+For example: `@my-scope/my-pantry/my-ingredient-a` may import or reference `@my-scope/my-pantry/my-ingredient-b`, but it must not reference
 `@my-scope/my-pantry/my-ingredient-b/sub-file.scss`.
 
 If an `ingredient.md` file appears in a subdirectory of an ingredient, it will
 be ignored. Roux ingredient tools must ignore `ingredient.md` files that appear in a subdirectory of an ingredient.
-
 
 
 ## `ingredient.md`
@@ -27,11 +25,15 @@ ingredient.
 
 ## Ingredient Path
 
-Ingredients are named by an *ingredient path*.
+Ingredients are named by an *ingredient path*. An ingredient path must
+begin with a pantry name followed by a slash. The pantry name may include an [npm scope][]: `@scope/my-pantry/`.
 
-An ingredient path takes the following form: `[<scope>]/<pantry>/<ingredient>`
+```
+[<scope>]/<pantry>/<ingredient>
+```
 
-The pantry name may include an [npm scope][]: `@scope/my-pantry/`
+The remainder of the ingredient path must be the slash-delimited path
+from the pantry root to the ingredient: `@scope/my-pantry/path/to/my-ingredient`.
 
 ### Examples
 
@@ -39,6 +41,7 @@ The pantry name may include an [npm scope][]: `@scope/my-pantry/`
 - `pantry/path/to/ingredient`
 - `@scope/pantry/ingredient`
 - `@scope/pantry/path/to/ingredient`
+
 
 ### Private ingredient paths
 
@@ -58,6 +61,7 @@ must be written as `@scope/my-pantry/my-ingredient/foo`, e.g.
 
 In any case, an ingredient path must not refer to a non-entry point file in
 another ingredient.
+
 
 ## Entry points
 Ingredients expose their public interface through *entry points*. An entry point
@@ -80,6 +84,12 @@ require other files in the ingredient using relative module paths. If the entry
 point requires the JavaScript entry point of another ingredient, it must use
 a full Roux ingredient path.
 
+### Sass
+An ingredient's Sass entry point must be named `index.scss`. The entry point
+may import other files in the ingredient using relative module paths.  If the
+entry point imports the Sass entry point of another ingredient, it must use
+a full Roux ingredient path.
+
 ### Model
 An ingredient may define a model entry point with a JavaScript module named
 `model.js`. If present, the exported value of the module must be used as the
@@ -95,11 +105,16 @@ An ingredient may define a preview template entry point with a Handlebars
 template named `preview.hbs`. If present, this entry point must be used as
 the outermost template when rendering a preview of the ingredient.
 
-### Sass
-An ingredient's Sass entry point must be named `index.scss`. The entry point
-may import other files in the ingredient using relative module paths.  If the
-entry point imports the Sass entry point of another ingredient, it must use
-a full Roux ingredient path.
+### Preview styles
+An ingredient may define a preview style entry point with a SCSS template
+named `preview.scss`. If present, this entry point must be used as the
+main CSS file to render a preview of the ingredient. A developer must import
+the ingredient's Sass entry point into the `preview.scss` using the full
+Roux ingredient path if both templates need to be rendered for the preview.
+
+### Assets
+An ingredient may export static assets (e.g. images) from a folder named
+`assets/static`.
 
 ## Composition
 While ingredients may not define sub-ingredients, they may reuse other
