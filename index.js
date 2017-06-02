@@ -399,11 +399,11 @@ function resolve(pantry, ingredient, entryPoint, config) {
 			return pantryInstance;
 		}
 
-		var ingredientInstance = pantryInstance.ingredients[ingredient];
-
-		if (!ingredientInstance) {
+		if (!pantryInstance.ingredients.hasOwnProperty(ingredient)) {
 			throw new IngredientDoesNotExistError(pantry, ingredient);
 		}
+
+		var ingredientInstance = pantryInstance.ingredients[ingredient];
 
 		if (!entryPoint) {
 			// we are resolving an ingredient, so we're done
