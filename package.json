@@ -20,29 +20,33 @@
     "ingredient"
   ],
   "author": "RMN Engineering",
+  "maintainers": [
+    "Ray Pierce <rpierce@rmn.com>"
+  ],
   "contributors": [
     "Elyse Holladay <eholladay@rmn.com>",
     "Lon Ingram <lingram@rmn.com>",
     "Kyle Smith <kbsmith@rmn.com>",
-    "Luke Zilioli <lzilioli@rmn.com>"
+    "Luke Zilioli <lzilioli@rmn.com>",
+    "Ray Pierce <rpierce@rmn.com>"
   ],
   "license": "MIT",
   "devDependencies": {
     "@retailmenot/core-ui-editorconfig": "^1.0.2",
-    "@retailmenot/core-ui-eslintrc": "^4.0.0",
-    "eslint": "^2.11.1",
-    "mock-fs": "^3.6.0",
-    "mockery": "^1.4.0",
-    "sinon": "^1.17.2",
-    "tap": "^2.2.0"
+    "@retailmenot/core-ui-eslintrc": "^7.0.0",
+    "eslint": "^5.10.0",
+    "mock-fs": "^4.7.0",
+    "mockery": "^2.1.0",
+    "sinon": "^7.1.1",
+    "tap": "^9.0.3"
   },
   "dependencies": {
     "bluebird": "^3.0.5",
     "core-error-predicates": "^1.1.0",
-    "debug": "^2.2.0",
-    "glob": "^6.0.1",
-    "lodash": "^3.10.1",
+    "debug": "^4.1.0",
+    "glob": "^6.0.4",
+    "lodash": "^4.17.11",
     "path-parse": "^1.0.5",
-    "validate-npm-package-name": "^2.2.2"
+    "validate-npm-package-name": "^3.0.0"
   }
 }
