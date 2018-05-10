@@ -38,7 +38,11 @@ tap.test('API', function (t) {
 		'exports the Ingredient class'
 	);
 
-	t.type(initialize, 'function', 'exports an initialize method');
+	t.type(
+		initialize,
+		'function',
+		'exports an initialize method'
+	);
 
 	t.test('initialize', function (t) {
 		t.autoend();
@@ -773,7 +777,7 @@ tap.test('API', function (t) {
 				Ingredient.isValidName.calledWithExactly(expected),
 				'the ingredient name is passed to `Ingredient.isValidName`'
 			);
-			Ingredient.isValidName.reset();
+			Ingredient.isValidName.resetHistory();
 			parseIngredientPath('@namespace/pantry/ingredient');
 			t.ok(
 				Ingredient.isValidName.calledWithExactly(expected),
@@ -792,7 +796,7 @@ tap.test('API', function (t) {
 				'the pantry name is passed to `Pantry.isValidName`'
 			);
 
-			Pantry.isValidName.reset();
+			Pantry.isValidName.resetHistory();
 			expected = '@namespace/pantry';
 			parseIngredientPath('@namespace/pantry/ingredient');
 			t.ok(
@@ -1163,9 +1167,9 @@ tap.test('API', function (t) {
 						pantry: expected
 					}
 				})
-				.then(function (actual) {
-					t.same(actual, expected, 'resolves to cached pantry');
-				});
+					.then(function (actual) {
+						t.same(actual, expected, 'resolves to cached pantry');
+					});
 			});
 
 			t.test('looks up pantry in search paths if not cached', function (t) {
@@ -1185,10 +1189,10 @@ tap.test('API', function (t) {
 					return resolve('pantry', {
 						pantrySearchPaths: [path.resolve('resolve')]
 					})
-					.then(function (actual) {
-						t.type(actual, Pantry, 'looks up pantry in search paths');
-					})
-					.finally(restoreMockFS);
+						.then(function (actual) {
+							t.type(actual, Pantry, 'looks up pantry in search paths');
+						})
+						.finally(restoreMockFS);
 				});
 
 				t.test('rejects if not found', function (t) {
@@ -1199,10 +1203,10 @@ tap.test('API', function (t) {
 					return resolve('no-such-pantry', {
 						pantrySearchPaths: [path.resolve('resolve')]
 					})
-					.catch(function (error) {
-						t.type(error, Error, 'resolves with an error if not found');
-					})
-					.finally(restoreMockFS);
+						.catch(function (error) {
+							t.type(error, Error, 'resolves with an error if not found');
+						})
+						.finally(restoreMockFS);
 				});
 			});
 		});
@@ -1229,10 +1233,10 @@ tap.test('API', function (t) {
 							pantry: path.resolve('resolve/pantry')
 						}
 					})
-					.then(function (actual) {
-						t.type(actual, Pantry, 'resolves string to pantry');
-					})
-					.finally(restoreMockFS);
+						.then(function (actual) {
+							t.type(actual, Pantry, 'resolves string to pantry');
+						})
+						.finally(restoreMockFS);
 				});
 
 				t.test('modifies the pantry', function (t) {
@@ -1253,11 +1257,11 @@ tap.test('API', function (t) {
 					};
 
 					return resolve('pantry', config)
-					.then(function (actual) {
-						t.type(config.pantries.pantry, Pantry, 'modifies the cache');
-						t.same(config.pantries.pantry, actual, 'modifies the cache');
-					})
-					.finally(restoreMockFS);
+						.then(function (actual) {
+							t.type(config.pantries.pantry, Pantry, 'modifies the cache');
+							t.same(config.pantries.pantry, actual, 'modifies the cache');
+						})
+						.finally(restoreMockFS);
 				});
 			});
 		});
@@ -1278,13 +1282,13 @@ tap.test('API', function (t) {
 							pantry: expected
 						}
 					})
-					.then(function (actual) {
-						t.same(
-							actual,
-							expected.ingredients.ingredient,
-							'resolves to ingredient from cached pantry'
-						);
-					});
+						.then(function (actual) {
+							t.same(
+								actual,
+								expected.ingredients.ingredient,
+								'resolves to ingredient from cached pantry'
+							);
+						});
 				});
 
 			t.test('looks up ingredient in `config.pantrySearchPaths`', function (t) {
@@ -1305,10 +1309,10 @@ tap.test('API', function (t) {
 				return resolve('pantry', 'path/to/ingredient', {
 					pantrySearchPaths: [path.resolve('resolve')]
 				})
-				.then(function (actual) {
-					t.type(actual, Ingredient, 'looks up ingredient in search paths');
-				})
-				.finally(restoreMockFS);
+					.then(function (actual) {
+						t.type(actual, Ingredient, 'looks up ingredient in search paths');
+					})
+					.finally(restoreMockFS);
 			});
 
 			t.test('rejects if not found', function (t) {
@@ -1325,10 +1329,10 @@ tap.test('API', function (t) {
 				return resolve('pantry', 'no-such-ingredient', {
 					pantrySearchPaths: [path.resolve('resolve')]
 				})
-				.catch(function (error) {
-					t.type(error, Error, 'resolves with an error if not found');
-				})
-				.finally(restoreMockFS);
+					.catch(function (error) {
+						t.type(error, Error, 'resolves with an error if not found');
+					})
+					.finally(restoreMockFS);
 			});
 
 			t.test('rejects with PantryDoesNotExistError if the pantry is not found', function (t) {
@@ -1350,10 +1354,10 @@ tap.test('API', function (t) {
 				return resolve('no-such-pantry', 'ingredient', {
 					pantrySearchPaths: [path.resolve('resolve')]
 				})
-				.catch(function (error) {
-					t.type(error, pantryErrors.PantryDoesNotExistError, 'rejects with a PantryDoesNotExistError if pantry not found');
-				})
-				.finally(restoreMockFS);
+					.catch(function (error) {
+						t.type(error, pantryErrors.PantryDoesNotExistError, 'rejects with a PantryDoesNotExistError if pantry not found');
+					})
+					.finally(restoreMockFS);
 			});
 
 			t.test('rejects with PantryNotADirectoryError if the pantry is found but not a directory', function (t) {
@@ -1366,10 +1370,10 @@ tap.test('API', function (t) {
 				return resolve('pantry', 'ingredient', {
 					pantrySearchPaths: [path.resolve('resolve')]
 				})
-				.catch(function (error) {
-					t.type(error, pantryErrors.PantryNotADirectoryError, 'rejects with a PantryNotADirectoryError if pantry found but not a directory');
-				})
-				.finally(restoreMockFS);
+					.catch(function (error) {
+						t.type(error, pantryErrors.PantryNotADirectoryError, 'rejects with a PantryNotADirectoryError if pantry found but not a directory');
+					})
+					.finally(restoreMockFS);
 			});
 
 			t.test('rejects with IngredientDoesNotExistError if the ingredient is not found', function (t) {
@@ -1386,28 +1390,28 @@ tap.test('API', function (t) {
 				return resolve('pantry', 'no-such-ingredient', {
 					pantrySearchPaths: [path.resolve('resolve')]
 				})
-				.catch(function (error) {
-					t.type(error, pantryErrors.IngredientDoesNotExistError, 'rejects with a IngredientDoesNotExistError if ingredient not found');
-				})
-				.finally(restoreMockFS);
+					.catch(function (error) {
+						t.type(error, pantryErrors.IngredientDoesNotExistError, 'rejects with a IngredientDoesNotExistError if ingredient not found');
+					})
+					.finally(restoreMockFS);
 			});
 
 			t.test('rejects with IngredientHasNoSuchEntrypointError if' +
 				'ingredient entryPoint not found',
-				function (t) {
-					mockfs({
-						resolve: {
-							pantry: {
-								ingredient: {
-									'ingredient.md': ''
-								}
+			function (t) {
+				mockfs({
+					resolve: {
+						pantry: {
+							ingredient: {
+								'ingredient.md': ''
 							}
 						}
-					});
+					}
+				});
 
-					return resolve('pantry', 'ingredient', 'handlebars', {
-						pantrySearchPaths: [path.resolve('resolve')]
-					})
+				return resolve('pantry', 'ingredient', 'handlebars', {
+					pantrySearchPaths: [path.resolve('resolve')]
+				})
 					.catch(function (error) {
 						t.type(
 							error,
@@ -1417,7 +1421,7 @@ tap.test('API', function (t) {
 						);
 					})
 					.finally(restoreMockFS);
-				}
+			}
 			);
 		});
 
@@ -1444,13 +1448,13 @@ tap.test('API', function (t) {
 							})
 						}
 					})
-					.then(function (actual) {
-						t.same(
-							actual,
-							expected,
-							'resolves to the entry point from the cached pantry'
-						);
-					});
+						.then(function (actual) {
+							t.same(
+								actual,
+								expected,
+								'resolves to the entry point from the cached pantry'
+							);
+						});
 				});
 
 			t.test('looks up entry point in `config.pantrySearchPaths`',
@@ -1472,10 +1476,10 @@ tap.test('API', function (t) {
 					return resolve('pantry', 'ingredient', 'javaScript', {
 						pantrySearchPaths: [path.resolve('resolve')]
 					})
-					.then(function (actual) {
-						t.equal(actual, expected, 'looks up entry point in search paths');
-					})
-					.finally(restoreMockFS);
+						.then(function (actual) {
+							t.equal(actual, expected, 'looks up entry point in search paths');
+						})
+						.finally(restoreMockFS);
 				});
 
 			t.test('rejects if not found', function (t) {
@@ -1492,10 +1496,10 @@ tap.test('API', function (t) {
 				return resolve('pantry', 'ingredient', 'no-such-entry-point', {
 					pantrySearchPaths: [path.resolve('resolve')]
 				})
-				.catch(function (error) {
-					t.type(error, Error, 'resolves with an error if not found');
-				})
-				.finally(restoreMockFS);
+					.catch(function (error) {
+						t.type(error, Error, 'resolves with an error if not found');
+					})
+					.finally(restoreMockFS);
 			});
 		});
 	});

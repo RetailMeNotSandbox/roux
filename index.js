@@ -149,104 +149,104 @@ function initialize(config, callback) {
 				throw new PantryDoesNotExistError(pantryBasePath);
 			});
 	})
-	.then(function (pantryStats) {
-		if (!pantryStats.isDirectory()) {
-			throw new PantryNotADirectoryError(pantryBasePath);
-		}
-	})
-	.then(function () {
+		.then(function (pantryStats) {
+			if (!pantryStats.isDirectory()) {
+				throw new PantryNotADirectoryError(pantryBasePath);
+			}
+		})
+		.then(function () {
 		// if package.json exists in the pantry root directory and the
 		// roux.pantryRoot key exists, resolve that path from the pantry root to
 		// determine the actual directory that ingredients live under.
-		var packageJsonPath = path.join(pantryBasePath, 'package.json');
-		return fs.readFileAsync(packageJsonPath)
-			.then(function (packageJsonBuffer) {
-				var packageJson = JSON.parse(packageJsonBuffer);
+			var packageJsonPath = path.join(pantryBasePath, 'package.json');
+			return fs.readFileAsync(packageJsonPath)
+				.then(function (packageJsonBuffer) {
+					var packageJson = JSON.parse(packageJsonBuffer);
 
-				if (_.isString(packageJson.roux.pantryRoot)) {
-					pantryPathPrefix = packageJson.roux.pantryRoot;
-					return path.join(pantryBasePath, pantryPathPrefix);
-				}
+					if (_.isString(packageJson.roux.pantryRoot)) {
+						pantryPathPrefix = packageJson.roux.pantryRoot;
+						return path.join(pantryBasePath, pantryPathPrefix);
+					}
 
-				return pantryBasePath;
-			})
-			.catch(function () {
-				return pantryBasePath;
+					return pantryBasePath;
+				})
+				.catch(function () {
+					return pantryBasePath;
+				});
+		})
+		.then(function (pantryPath) {
+			pantryConfig.path = pantryPath;
+			return globAsync('**/ingredient.md', {
+				cwd: pantryPath,
+				strict: true
 			});
-	})
-	.then(function (pantryPath) {
-		pantryConfig.path = pantryPath;
-		return globAsync('**/ingredient.md', {
-			cwd: pantryPath,
-			strict: true
-		});
-	})
-	.then(function (ingredients) {
-		var ingredientPaths = [];
+		})
+		.then(function (ingredients) {
+			var ingredientPaths = [];
 
-		pantryConfig.ingredients = _.chain(ingredients)
-			.map(function (ingredient) {
+			pantryConfig.ingredients = _.chain(ingredients)
+				.map(function (ingredient) {
 				// we get foo/bar/ingredient.md and need foo/bar
-				var ingredientPath = path.resolve(
-					pantryBasePath,
-					pantryPathPrefix,
-					pathParse(ingredient).dir
-				);
+					var ingredientPath = path.resolve(
+						pantryBasePath,
+						pantryPathPrefix,
+						pathParse(ingredient).dir
+					);
 
-				// save the path for detecting nested ingredients
-				ingredientPaths.push(ingredientPath);
+					// save the path for detecting nested ingredients
+					ingredientPaths.push(ingredientPath);
 
-				return ingredientPath;
-			})
-			.filter(function (ingredientPathToFilter) {
+					return ingredientPath;
+				})
+				.filter(function (ingredientPathToFilter) {
 				// to verify that a given ingredient is not nested in any other
 				// ingredient, we check that the given ingredient's path does not
 				// begin with the path to any other ingredient; we append path.sep to
 				// avoid false positives like this: path/to/foo and path/to/foobar
-				return _.every(ingredientPaths, function (ingredientPath) {
-					return !_.startsWith(
-						ingredientPathToFilter,
-						ingredientPath + path.sep
-					);
-				});
-			})
-			.reduce(function (result, ingredient) {
-				var name = path.relative(
-					path.join(pantryBasePath, pantryPathPrefix),
-					ingredient
-				);
-
-				result[name] = new Ingredient({
-					name: name,
-					path: ingredient,
-					pantryName: config.name,
-					entryPoints: {}
-				});
-
-				return result;
-			},
-			{})
-			.value();
-
-		return Promise.all(
-			_.map(pantryConfig.ingredients,
-				function (ingredient) {
-					// for each predicate, call it with the ingredient path
-					return Promise.all(
-						_.map(config.predicates, function (predicate, predicateName) {
-							return hasEntryPointAsync(ingredient.path, predicate)
-								.then(function (result) {
-									ingredient.entryPoints[predicateName] = result;
-								});
-						})
-					);
+					return _.every(ingredientPaths, function (ingredientPath) {
+						return !_.startsWith(
+							ingredientPathToFilter,
+							ingredientPath + path.sep
+						);
+					});
 				})
+				.reduce(function (result, ingredient) {
+					var name = path.relative(
+						path.join(pantryBasePath, pantryPathPrefix),
+						ingredient
+					);
+
+					result[name] = new Ingredient({
+						name: name,
+						path: ingredient,
+						pantryName: config.name,
+						entryPoints: {}
+					});
+
+					return result;
+				},
+				{})
+				.value();
+
+			return Promise.all(
+				_.map(pantryConfig.ingredients,
+					function (ingredient) {
+					// for each predicate, call it with the ingredient path
+						return Promise.all(
+							_.map(config.predicates, function (predicate, predicateName) {
+								return hasEntryPointAsync(ingredient.path, predicate)
+									.then(function (result) {
+										ingredient.entryPoints[predicateName] = result;
+									});
+							})
+						);
+					})
 			)
-			.then(function () {
-				return new Pantry(pantryConfig);
-			}
-		);
-	});
+				.then(function () {
+					return new Pantry(pantryConfig);
+				}
+				);
+		});
 
 	if (typeof callback === 'function') {
 		promise.asCallback(callback);
@@ -385,64 +385,64 @@ function resolve(pantry, ingredient, entryPoint, config) {
 				});
 			}));
 	})
-	.then(function (pantryInstance) {
-		assert(
-			Pantry.isPantry(pantryInstance),
-			util.format(
-				'Pantry must be a pantry. Got: %s',
-				typeof pantryInstance
-			)
-		);
-
-		if (!ingredient) {
-			// we are resolving a pantry, so we're done
-			return pantryInstance;
-		}
-
-		if (!pantryInstance.ingredients.hasOwnProperty(ingredient)) {
-			throw new IngredientDoesNotExistError(pantry, ingredient);
-		}
-
-		var ingredientInstance = pantryInstance.ingredients[ingredient];
-
-		if (!entryPoint) {
-			// we are resolving an ingredient, so we're done
-			return ingredientInstance;
-		}
-
-		if (!ingredientInstance.entryPoints[entryPoint]) {
-			throw new IngredientHasNoSuchEntrypointError(
-				pantry,
-				ingredient,
-				entryPoint
+		.then(function (pantryInstance) {
+			assert(
+				Pantry.isPantry(pantryInstance),
+				util.format(
+					'Pantry must be a pantry. Got: %s',
+					typeof pantryInstance
+				)
 			);
-		}
 
-		return path.join(
-			ingredientInstance.path,
-			ingredientInstance.entryPoints[entryPoint].filename
-		);
-	})
-	.catch(function (error) {
-		debug('got error', error);
-		debug(error.stack);
-		if (error instanceof Promise.AggregateError) {
-			if (_.every(error, function (e) {
+			if (!ingredient) {
+			// we are resolving a pantry, so we're done
+				return pantryInstance;
+			}
+
+			if (!pantryInstance.ingredients.hasOwnProperty(ingredient)) {
+				throw new IngredientDoesNotExistError(pantry, ingredient);
+			}
+
+			var ingredientInstance = pantryInstance.ingredients[ingredient];
+
+			if (!entryPoint) {
+			// we are resolving an ingredient, so we're done
+				return ingredientInstance;
+			}
+
+			if (!ingredientInstance.entryPoints[entryPoint]) {
+				throw new IngredientHasNoSuchEntrypointError(
+					pantry,
+					ingredient,
+					entryPoint
+				);
+			}
+
+			return path.join(
+				ingredientInstance.path,
+				ingredientInstance.entryPoints[entryPoint].filename
+			);
+		})
+		.catch(function (error) {
+			debug('got error', error);
+			debug(error.stack);
+			if (error instanceof Promise.AggregateError) {
+				if (_.every(error, function (e) {
 				// Ensure that every error is a PantryDoesNotExistError
 				// and if so throw the first instance of that error.
 				// Otherwise, just throw the aggregate error.
-				return e instanceof PantryDoesNotExistError;
-			})) {
-				throw error[0];
-			} else if (_.every(error, function (e) {
+					return e instanceof PantryDoesNotExistError;
+				})) {
+					throw error[0];
+				} else if (_.every(error, function (e) {
 				// Do the same thing for PantryNotADirectoryError
-				return e instanceof PantryNotADirectoryError;
-			})) {
-				throw error[0];
+					return e instanceof PantryNotADirectoryError;
+				})) {
+					throw error[0];
+				}
 			}
-		}
-		throw error;
-	});
+			throw error;
+		});
 }
 
 /**
@@ -456,11 +456,11 @@ function resolve(pantry, ingredient, entryPoint, config) {
  */
 function initAndCachePantry(pantryCache, config) {
 	return initialize(config)
-	.then(function (initializedPantry) {
+		.then(function (initializedPantry) {
 		// cache the pantry for next time
-		pantryCache[config.name] = initializedPantry;
-		return initializedPantry;
-	});
+			pantryCache[config.name] = initializedPantry;
+			return initializedPantry;
+		});
 }
 
 /**
