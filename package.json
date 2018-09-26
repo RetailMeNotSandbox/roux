@@ -12,7 +12,7 @@
     "url": "https://github.com/RetailMeNotSandbox/roux.git"
   },
   "engines": {
-    "node": ">= 4"
+    "node": ">= 6"
   },
   "keywords": [
     "roux",
