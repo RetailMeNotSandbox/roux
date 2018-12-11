@@ -298,14 +298,16 @@ tap.test('API', function (t) {
 					function (error, pantry) {
 						t.type(error, Error);
 						t.equals(pantry, undefined, 'pantry should be undefined');
-						t.end();
 					})
 					.catch(function (e) {
-						if (e.code !== 'ENOENT') {
+						if (!e.message.match(/Pantry .* does not exist\.$/)) {
 							throw e;
 						}
 					})
-					.finally(restoreMockFS);
+					.finally(function () {
+						restoreMockFS();
+						t.end();
+					});
 			});
 		});
 
