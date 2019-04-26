@@ -1,6 +1,6 @@
 {
   "name": "@retailmenot/roux",
-  "version": "1.0.4",
+  "version": "2.0.0",
   "description": "Roux SDK and specification",
   "main": "index.js",
   "scripts": {
