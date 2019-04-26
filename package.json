@@ -12,7 +12,7 @@
     "url": "https://github.com/RetailMeNotSandbox/roux.git"
   },
   "engines": {
-    "node": ">= 6"
+    "node": ">=8"
   },
   "keywords": [
     "roux",
@@ -34,14 +34,14 @@
   "devDependencies": {
     "@retailmenot/core-ui-editorconfig": "^1.0.2",
     "@retailmenot/core-ui-eslintrc": "^7.0.0",
-    "eslint": "^5.10.0",
-    "mock-fs": "^4.7.0",
+    "eslint": "^5.16.0",
+    "mock-fs": "^4.9.0",
     "mockery": "^2.1.0",
-    "sinon": "^7.1.1",
-    "tap": "^12.1.0"
+    "sinon": "^7.3.2",
+    "tap": "^13.0.3"
   },
   "dependencies": {
-    "bluebird": "^3.0.5",
+    "bluebird": "^3.5.4",
     "core-error-predicates": "^1.1.0",
     "debug": "^4.1.0",
     "glob": "^6.0.4",
