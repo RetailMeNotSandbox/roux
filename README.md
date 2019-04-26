@@ -2,7 +2,7 @@
 
 The SDK for the Roux component architecture, Roux ingredient spec, and a node interface to a pantry.
 
-[![Build Status](https://travis-ci.org/RetailMeNotSandbox/roux.svg?branch=master)](https://travis-ci.org/RetailMeNotSandbox/roux) [![Coverage Status](https://coveralls.io/repos/github/RetailMeNotSandbox/roux/badge.svg?branch=master)](https://coveralls.io/github/RetailMeNotSandbox/roux?branch=master)
+[![Build Status](https://travis-ci.org/RetailMeNotSandbox/roux.svg?branch=master)](https://travis-ci.org/RetailMeNotSandbox/roux) [![Coverage Status](https://coveralls.io/repos/github/RetailMeNotSandbox/roux/badge.svg?branch=master)](https://coveralls.io/github/RetailMeNotSandbox/roux?branch=master) [![Greenkeeper badge](https://badges.greenkeeper.io/RetailMeNotSandbox/roux.svg)](https://greenkeeper.io/)
 
 ## Installation
 
