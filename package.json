@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "lint": "eslint .",
-    "test": "tap -Rspec test/*.js --cov"
+    "test": "tap -Rspec test/*.js --cov",
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
   },
   "repository": {
     "type": "git",
@@ -47,6 +49,8 @@
     "glob": "^6.0.4",
     "lodash": "^4.17.11",
     "path-parse": "^1.0.5",
-    "validate-npm-package-name": "^3.0.0"
-  }
+    "validate-npm-package-name": "^3.0.0",
+    "snyk": "^1.316.1"
+  },
+  "snyk": true
 }
