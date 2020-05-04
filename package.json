@@ -43,14 +43,14 @@
     "tap": "^14.10.7"
   },
   "dependencies": {
-    "bluebird": "^3.5.4",
+    "bluebird": "^3.7.2",
     "core-error-predicates": "^1.1.0",
-    "debug": "^4.1.0",
-    "glob": "^6.0.4",
-    "lodash": "^4.17.11",
-    "path-parse": "^1.0.5",
-    "validate-npm-package-name": "^3.0.0",
-    "snyk": "^1.316.1"
+    "debug": "^4.1.1",
+    "glob": "^7.1.6",
+    "lodash": "^4.17.15",
+    "path-parse": "^1.0.6",
+    "snyk": "^1.316.1",
+    "validate-npm-package-name": "^3.0.0"
   },
   "snyk": true
 }
