@@ -47,7 +47,7 @@
     "core-error-predicates": "^1.1.0",
     "debug": "^4.2.0",
     "glob": "^7.1.6",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "path-parse": "^1.0.6",
     "snyk": "^1.332.0",
     "validate-npm-package-name": "^3.0.0"
