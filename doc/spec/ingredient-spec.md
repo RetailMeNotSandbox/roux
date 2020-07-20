@@ -1,54 +1,67 @@
-# Conventions
-The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
-"SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be
-interpreted as described in [RFC 2119][].
+# Roux Ingredient Spec
 
-# Roux Ingredients
-A component in the Roux ecosystem is called an *ingredient*. A Roux ingredient
-is a filesystem subtree containing an `ingredient.md` file at its root.
-Ingredients must be distributed in a *pantry*: a filesystem subtree containing
-one or more Roux ingredients.
+A component in the Roux ecosystem is called an **ingredient**.
 
-An ingredient may be small (e.g. a single button) or large (the entire coupon
-ingredient). An ingredient may include other ingredients by composition (the
-coupon uses the button ingredient, e.g.), but must not contain other
-ingredients: if an `ingredient.md` file appears in a subdirectory of an
-ingredient, it will be ignored. Roux ingredient tools must ignore
-`ingredient.md` files that appear in a subdirectory of an ingredient.
+An ingredient is a filesystem subtree containing an `ingredient.md` file at its
+root. Ingredients must be distributed in a **pantry**: a filesystem subtree
+containing one or more Roux ingredients. [Read the Pantry specification for more information on pantries.](pantry-spec.md)
+
+An ingredient can be of any size. An ingredient may *include* other ingredients
+by composition but must not *contain* other ingredients.
+
+For example: `@my-scope/my-pantry/my-ingredient-a` may import or reference `@my-scope/my-pantry/my-ingredient-b`, but it must not reference
+`@my-scope/my-pantry/my-ingredient-b/sub-file.scss`.
+
+If an `ingredient.md` file appears in a subdirectory of an ingredient, it will
+be ignored. Roux ingredient tools must ignore `ingredient.md` files that appear in a subdirectory of an ingredient.
+
 
 ## `ingredient.md`
+
 An ingredient is defined by the presence of a file named `ingredient.md` in a
 directory. The file should document the usage of the ingredient. Roux ingredient
 tools may use the first paragraph of the file as a description of the
 ingredient.
 
-## Roux ingredient path
-Ingredients are named by an *ingredient path*. An ingredient path must begin
-with a pantry name followed by a slash: `my-pantry/`. The pantry name may
-include an [npm scope][]: `@scope/my-pantry/`. The remainder of the ingredient
-path must be the slash-delimited path from the pantry root to the ingredient:
-`@scope/my-pantry/path/to/my-ingredient`.
+## Ingredient Path
+
+Ingredients are named by an *ingredient path*. An ingredient path must
+begin with a pantry name followed by a slash. The pantry name may include an [npm scope][]: `@scope/my-pantry/`.
+
+```
+[<scope>]/<pantry>/<ingredient>
+```
+
+The remainder of the ingredient path must be the slash-delimited path
+from the pantry root to the ingredient: `@scope/my-pantry/path/to/my-ingredient`.
 
 ### Examples
+
 - `pantry/ingredient`
 - `pantry/path/to/ingredient`
 - `@scope/pantry/ingredient`
 - `@scope/pantry/path/to/ingredient`
 
+
 ### Private ingredient paths
+
 Ingredients should refer to non-entry point files using relative paths:
-`../path/to/file`.
+`./path/to/file`.
+
+For example, in `my-ingredient/index.scss`, to refer to a non-entry point
+SCSS file, you may `@import subfile.scss` or `@import subfolder/subfile.scss`.
 
 Some technologies (Handlebars, e.g.) have limitations that prevent using
-relative paths. In this case, ingredients must refer to non-entry point files by
-prepending a relative path from the ingredient root to the file in question with
-the ingredient's ingredient path:
-`@scope/my-pantry/path/to/my-ingredient/path/to/file`. The resulting path must
-be normalized: `@scope/my-pantry/my-ingredient/./foo` must be written as
-`@scope/my-pantry/my-ingredient/foo`, e.g.
+relative paths. In this case, ingredients must refer to non-entry point files
+by prepending a relative path from the ingredient root to the file in
+question with the ingredient's ingredient path: `@scope/my-pantry/path/to/my-ingredient/path/to/file`.
+
+The resulting path must be normalized: `@scope/my-pantry/my-ingredient/./foo`
+must be written as `@scope/my-pantry/my-ingredient/foo`, e.g.
 
 In any case, an ingredient path must not refer to a non-entry point file in
 another ingredient.
+
 
 ## Entry points
 Ingredients expose their public interface through *entry points*. An entry point
@@ -71,6 +84,12 @@ require other files in the ingredient using relative module paths. If the entry
 point requires the JavaScript entry point of another ingredient, it must use
 a full Roux ingredient path.
 
+### Sass
+An ingredient's Sass entry point must be named `index.scss`. The entry point
+may import other files in the ingredient using relative module paths.  If the
+entry point imports the Sass entry point of another ingredient, it must use
+a full Roux ingredient path.
+
 ### Model
 An ingredient may define a model entry point with a JavaScript module named
 `model.js`. If present, the exported value of the module must be used as the
@@ -86,11 +105,16 @@ An ingredient may define a preview template entry point with a Handlebars
 template named `preview.hbs`. If present, this entry point must be used as
 the outermost template when rendering a preview of the ingredient.
 
-### Sass
-An ingredient's Sass entry point must be named `index.scss`. The entry point
-may import other files in the ingredient using relative module paths.  If the
-entry point imports the Sass entry point of another ingredient, it must use
-a full Roux ingredient path.
+### Preview styles
+An ingredient may define a preview style entry point with a SCSS template
+named `preview.scss`. If present, this entry point must be used as the
+main CSS file to render a preview of the ingredient. A developer must import
+the ingredient's Sass entry point into the `preview.scss` using the full
+Roux ingredient path if both templates need to be rendered for the preview.
+
+### Assets
+An ingredient may export static assets (e.g. images) from a folder named
+`assets/static`.
 
 ## Composition
 While ingredients may not define sub-ingredients, they may reuse other
@@ -99,4 +123,3 @@ referring to one or more of its entry points. Ingredients must not refer to
 any other files in an ingredient.
 
 [npm scope]: https://docs.npmjs.com/misc/scope
-[RFC 2119]: https://www.ietf.org/rfc/rfc2119.txt
