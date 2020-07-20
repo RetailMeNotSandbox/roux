@@ -36,20 +36,20 @@
   "devDependencies": {
     "@retailmenot/core-ui-editorconfig": "^1.0.2",
     "@retailmenot/core-ui-eslintrc": "^7.0.0",
-    "eslint": "^6.8.0",
+    "eslint": "^7.5.0",
     "mock-fs": "^4.9.0",
     "mockery": "^2.1.0",
     "sinon": "^9.0.2",
+    "snyk": "^1.363.0",
     "tap": "^14.10.7"
   },
   "dependencies": {
     "bluebird": "^3.7.2",
     "core-error-predicates": "^1.1.0",
-    "debug": "^4.2.0",
+    "debug": "^4.1.1",
     "glob": "^7.1.6",
     "lodash": "^4.17.19",
     "path-parse": "^1.0.6",
-    "snyk": "^1.332.0",
     "validate-npm-package-name": "^3.0.0"
   },
   "snyk": true
